@@ -10,11 +10,11 @@ import (
 
 func updateLog(p *widgets.Paragraph, text string) {
 	w, h := ui.TerminalDimensions()
-	p.Text = fmt.Sprintf("%-*s", w-2, text)
-	//p.Text = fmt.Sprintf("%*s", w-2, text)
-	p.TextStyle.Fg = ui.ColorBlack
-	p.TextStyle.Bg = ui.ColorCyan
-	p.Border = false
+	p.Text = text
+	p.TextStyle.Fg = ui.ColorYellow
+	//p.TextStyle.Bg = ui.ColorCyan
+	//p.Border = false
+	p.BorderTop = false
 	p.SetRect(0, h-3, w, h)
 
 	ui.Render(p)
@@ -32,6 +32,19 @@ func updateTitle(p *widgets.Paragraph, text string) {
 	ui.Render(p)
 }
 
+func updateTitleSub(p *widgets.Paragraph, text string) {
+	w, h := ui.TerminalDimensions()
+	p.Text = fmt.Sprintf("%-*s", w-2, text)
+	//p.Text = fmt.Sprintf("%*s", w-2, text)
+	p.TextStyle.Fg = ui.ColorBlack
+	p.TextStyle.Bg = ui.ColorCyan
+	//p.Border = false
+	p.BorderBottom = false
+	p.SetRect(0, h-5, w, h-2)
+
+	ui.Render(p)
+}
+
 func main() {
 	if err := ui.Init(); err != nil {
 		log.Fatalf("failed to initialize termui: %v", err)
@@ -40,6 +53,9 @@ func main() {
 
 	ptitle := widgets.NewParagraph()
 	updateTitle(ptitle, "Hello World!")
+
+	ptitle_log := widgets.NewParagraph()
+	updateTitleSub(ptitle_log, "Sub Title")
 
 	plog := widgets.NewParagraph()
 	updateLog(plog, "log...")

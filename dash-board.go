@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 
 	ui "github.com/gizak/termui/v3"
@@ -9,8 +10,11 @@ import (
 
 func updateLog(p *widgets.Paragraph, text string) {
 	w, h := ui.TerminalDimensions()
-	p.Text = text
-	p.PaddingLeft = (w - len(text)) / 2
+	p.Text = fmt.Sprintf("%-*s", w-2, text)
+	//p.Text = fmt.Sprintf("%*s", w-2, text)
+	p.TextStyle.Fg = ui.ColorBlack
+	p.TextStyle.Bg = ui.ColorCyan
+	p.Border = false
 	p.SetRect(0, h-3, w, h)
 
 	ui.Render(p)
@@ -18,8 +22,11 @@ func updateLog(p *widgets.Paragraph, text string) {
 
 func updateTitle(p *widgets.Paragraph, text string) {
 	w, _ := ui.TerminalDimensions()
+	p.Title = "Title"
 	p.Text = text
+	p.TextStyle.Fg = ui.ColorYellow
 	p.PaddingLeft = (w - len(text)) / 2
+	p.BorderStyle.Fg = ui.ColorRed
 	p.SetRect(0, 0, w, 3)
 
 	ui.Render(p)
@@ -36,6 +43,38 @@ func main() {
 
 	plog := widgets.NewParagraph()
 	updateLog(plog, "log...")
+
+	// // test : make unique id
+	// // 2147483648 (2^31)
+	// // 20210414xx
+	// // 113176xxxx (2021 * 04 * 14)
+	// tmNow := time.Now()
+	// year, month, day := tmNow.Date()
+	// time.Now().Hour()
+	// id := (year * int(month) * day) * 10000
+	// fmt.Println(id, year, month, day)
+
+	// //var cs sync.Mutex
+	// var data uint16
+	// go func() {
+	// 	for {
+	// 		//cs.Lock()
+	// 		data++
+	// 		//cs.Unlock()
+	// 		time.Sleep(time.Nanosecond)
+	// 	}
+	// }()
+	// go func() {
+	// 	for {
+	// 		//cs.Lock()
+	// 		if data == 0 {
+	// 			time.Sleep(time.Nanosecond)
+	// 			updateLog(plog, fmt.Sprintf("the value is %v.", data))
+	// 			//time.Sleep(time.Nanosecond)
+	// 		}
+	// 		//cs.Unlock()
+	// 	}
+	// }()
 
 	for e := range ui.PollEvents() {
 		if e.Type == ui.KeyboardEvent {
